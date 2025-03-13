@@ -1,5 +1,24 @@
 import * as React from 'react';
 
+
+/* useStorageState  key = 'search' =>> localStorage  key = 'search'
+With the key in place, you can use this new custom hook more than once in your application
+ useStorageState  key = 'othersearch' =>> localStorage  key = 'othersearch'
+*/
+const useStorageState = (key,initialState) => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || initialState
+  );
+  React.useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value,key]);
+
+  return [value, key]
+};
+
+
+
+
 const App = () => {
   const stories = [
     {
@@ -20,15 +39,17 @@ const App = () => {
     },
   ];
 
-  const [searchTerm, setSearchTerm] = React.useState(
-       localStorage.getItem('search') || 'React'
-    );
-
+ const [searchTerm, setSearchTerm] = useStorageState(
+  'search',
+  'React'
+  );
   
 
+
+
+
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    localStorage.setItem('search', event.target.value)
+    setSearchTerm(event.target.value)
   };
 
   const searchedStories = stories.filter((story) =>
