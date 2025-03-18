@@ -13,7 +13,7 @@ const useStorageState = (key,initialState) => {
     localStorage.setItem(key, value);
   }, [value,key]);
 
-  return [value, key]
+  return [value, setValue]
 };
 
 
