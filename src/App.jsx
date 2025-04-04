@@ -20,10 +20,15 @@ const initialStories = [
   },
 ];
 
-
-
-
-
+/* returns a promise with data in its shorthand
+version once it resolves.*/
+const getAsyncStories = () =>
+new Promise((resolve) =>
+setTimeout(
+() => resolve({ data: { stories: initialStories } }),
+2000
+)
+)
 
 /* useStorageState  key = 'search' =>> localStorage  key = 'search'
 With the key in place, you can use this new custom hook more than once in your application
@@ -51,7 +56,19 @@ const App = () => {
   'React'
   );
 
- const [stories, setStories] = React.useState(initialStories);
+
+  const [stories, setStories] = React.useState([]);
+
+/*useEffect hook, call the function and resolve the returned promise as a side-effect*/
+  React.useEffect(() => {
+    getAsyncStories().then(result => {
+      setStories(result.data.stories);
+    });
+  }, []);
+
+
+
+
   
   const handleRemoveStory = (item) => {
     const newStories = stories.filter(
